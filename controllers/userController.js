@@ -3,7 +3,12 @@ const User = require('../models/User');
 module.exports = {
   async getUsers(req, res) {
     try {
-      const users = await User.find();
+      const users = await User.find()
+        .select('-__v')
+        .populate({
+            path: 'thoughts',
+            select: '-__v'
+        });
       res.json(users);
     } catch (err) {
       res.status(500).json(err);
@@ -79,7 +84,7 @@ module.exports = {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { responses: req.body } },
+        { $addToSet: { friends: req.body } },
         { runValidators: true, new: true }
       );
 
@@ -89,7 +94,8 @@ module.exports = {
 
       res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json(err)
+      console.log(err);
     }
   },
   async removeFromFriendList(req, res) {
