@@ -63,18 +63,6 @@ module.exports = {
         return res.status(404).json({ message: 'No user with this id!' });
       }
 
-    //   const user = await User.findOneAndUpdate(
-    //     { videos: req.params.videoId },
-    //     { $pull: { videos: req.params.videoId } },
-    //     { new: true }
-    //   );
-
-    //   if (!user) {
-    //     return res
-    //       .status(404)
-    //       .json({ message: 'Video created but no user with this id!' });
-    //   }
-
       res.json({ message: 'User successfully deleted!' });
     } catch (err) {
       res.status(500).json(err);
@@ -84,7 +72,7 @@ module.exports = {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.body } },
+        { $addToSet: { friends: req.params.friendsId } },
         { runValidators: true, new: true }
       );
 
@@ -102,7 +90,7 @@ module.exports = {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { $pull: { friends: req.params.friendsId } },
         { runValidators: true, new: true }
       )
 
