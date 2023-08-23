@@ -1,6 +1,11 @@
 const { Schema, model } = require('mongoose');
 const reactionSchema = require('./Reaction');
 
+const formatDate = () => {
+    return `${new Date().getUTCMonth() + 1}/${new Date().getUTCDate()}/${new Date().getUTCFullYear()}`;
+}
+
+
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -12,6 +17,7 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            get: formatDate,
         },
         username: {
             type: String,
@@ -22,8 +28,9 @@ const thoughtSchema = new Schema(
     {
         toJSON: {
             virtuals: true,
-          },
-          id: false,
+            getters: true,
+        },
+        id: false,
     }
 );
 
